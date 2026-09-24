@@ -17,9 +17,9 @@
   --line:#d9d9d9;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--white);color:var(--black);font-family:Inter,Arial,sans-serif}
+html,body{margin:0;padding:0;background:var(--white);color:var(--black);font-family:Montserrat,Arial,sans-serif}
 body{min-height:100vh}
-button,input{font:inherit}
+button,input{font:inherit;font-family:Montserrat,Arial,sans-serif}
 button{cursor:pointer}
 
 .game{
@@ -219,7 +219,7 @@ button{cursor:pointer}
     <div class="label">qfadesign · juego tipográfico</div>
     <h1 class="big-title">¿Adivinás la<br><em>tipografía?</em></h1>
     <p class="intro">
-      15 rondas. 15 segundos por ronda. Mirá la forma, los detalles y elegí
+      10 rondas. 10 segundos por ronda. Mirá la forma, los detalles y elegí
       cuál de las cuatro opciones es la tipografía que estás viendo.
     </p>
     <button class="primary" id="startBtn">Empezar juego →</button>
@@ -228,7 +228,7 @@ button{cursor:pointer}
   <div id="gameScreen" class="screen">
     <div class="top">
       <div class="logo">qfa<span>design</span></div>
-      <div class="round" id="roundText">Ronda 1 / 15</div>
+      <div class="round" id="roundText">Ronda 1 / 10</div>
     </div>
 
     <div class="timer">
@@ -314,8 +314,8 @@ const FONT_BANK = [
   {name:"IBM Plex Mono", css:"IBM Plex Mono", category:"mono"}
 ];
 
-const TOTAL_ROUNDS = 15;
-const ROUND_TIME = 15;
+const TOTAL_ROUNDS = 10;
+const ROUND_TIME = 10;
 
 let rounds = [];
 let currentRound = 0;
