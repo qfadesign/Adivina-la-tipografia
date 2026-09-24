@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adiviná la tipografía — qfadesign</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=Bebas+Neue&family=Bitter:wght@400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=EB+Garamond:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inconsolata:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Lato:wght@400;700;900&family=Lobster&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Merriweather:wght@400;700;900&family=Montserrat:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&family=Open+Sans:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Raleway:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&family=Roboto+Slab:wght@400;500;700&family=Rubik:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --blue:#1457ff;
+  --black:#050505;
+  --white:#fff;
+  --line:#d9d9d9;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--white);color:var(--black);font-family:Inter,Arial,sans-serif}
+body{min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+
+.game{
+  width:min(900px,100%);
+  min-height:100vh;
+  margin:auto;
+  padding:28px 22px 45px;
+  display:flex;
+  flex-direction:column;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  border-bottom:2px solid var(--black);
+  padding-bottom:18px;
+}
+.logo{font-weight:800;letter-spacing:-.04em;font-size:22px}
+.logo span{color:var(--blue)}
+.round{font-size:14px;font-weight:700}
+
+.timer{
+  margin-top:24px;
+  height:10px;
+  border:2px solid var(--black);
+  border-radius:99px;
+  overflow:hidden;
+}
+.timer-fill{
+  height:100%;
+  width:100%;
+  background:var(--blue);
+  transform-origin:left;
+  transition:width .1s linear;
+}
+
+.score-row{
+  display:flex;
+  justify-content:space-between;
+  margin-top:10px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:45px 0;
+}
+.label{
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:15px;
+}
+.sample{
+  font-size:clamp(52px,10vw,108px);
+  line-height:.95;
+  letter-spacing:-.045em;
+  word-break:break-word;
+  margin:0 0 42px;
+}
+.answers{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.answer{
+  border:2px solid var(--black);
+  background:var(--white);
+  padding:18px 20px;
+  text-align:left;
+  font-weight:700;
+  transition:.15s ease;
+}
+.answer:hover:not(:disabled){
+  background:var(--black);
+  color:var(--white);
+}
+.answer.correct{
+  background:var(--blue);
+  color:var(--white);
+  border-color:var(--blue);
+}
+.answer.wrong{
+  background:var(--black);
+  color:var(--white);
+  border-color:var(--black);
+}
+.answer:disabled{cursor:default}
+
+.feedback{
+  min-height:34px;
+  margin-top:18px;
+  font-size:14px;
+  font-weight:700;
+}
+.feedback.ok{color:var(--blue)}
+.feedback.bad{color:var(--black)}
+
+.screen{display:none}
+.screen.active{display:flex}
+
+.start,.end{
+  flex:1;
+  min-height:70vh;
+  flex-direction:column;
+  justify-content:center;
+}
+.big-title{
+  font-size:clamp(48px,9vw,100px);
+  line-height:.9;
+  letter-spacing:-.06em;
+  margin:0 0 25px;
+}
+.big-title em{
+  color:var(--blue);
+  font-style:normal;
+}
+.intro{
+  max-width:620px;
+  font-size:18px;
+  line-height:1.5;
+  margin-bottom:32px;
+}
+.primary{
+  width:max-content;
+  border:2px solid var(--black);
+  background:var(--black);
+  color:var(--white);
+  padding:15px 24px;
+  font-weight:800;
+}
+.primary:hover{background:var(--blue);border-color:var(--blue)}
+
+.end-score{
+  font-size:72px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:-.06em;
+  margin:10px 0 30px;
+}
+.form{
+  display:flex;
+  gap:10px;
+  max-width:520px;
+}
+.form input{
+  min-width:0;
+  flex:1;
+  border:2px solid var(--black);
+  padding:15px;
+  outline:none;
+}
+.form input:focus{border-color:var(--blue)}
+.rank{
+  margin-top:40px;
+  max-width:620px;
+}
+.rank h3{
+  margin:0 0 12px;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+.rank-row{
+  display:grid;
+  grid-template-columns:45px 1fr 90px;
+  gap:10px;
+  border-top:1px solid var(--line);
+  padding:11px 0;
+  font-size:14px;
+}
+.rank-row:last-child{border-bottom:1px solid var(--line)}
+.muted{color:#666}
+
+@media(max-width:600px){
+  .game{padding:20px 16px 35px}
+  .answers{grid-template-columns:1fr}
+  .sample{font-size:clamp(48px,16vw,78px)}
+  .form{flex-direction:column}
+  .primary{width:100%}
+}
+</style>
+</head>
+
+<body>
+<div class="game">
+
+  <div id="startScreen" class="screen start active">
+    <div class="label">qfadesign · juego tipográfico</div>
+    <h1 class="big-title">¿Adivinás la<br><em>tipografía?</em></h1>
+    <p class="intro">
+      15 rondas. 15 segundos por ronda. Mirá la forma, los detalles y elegí
+      cuál de las cuatro opciones es la tipografía que estás viendo.
+    </p>
+    <button class="primary" id="startBtn">Empezar juego →</button>
+  </div>
+
+  <div id="gameScreen" class="screen">
+    <div class="top">
+      <div class="logo">qfa<span>design</span></div>
+      <div class="round" id="roundText">Ronda 1 / 15</div>
+    </div>
+
+    <div class="timer">
+      <div class="timer-fill" id="timerFill"></div>
+    </div>
+
+    <div class="score-row">
+      <span id="scoreText">Puntos: 0</span>
+      <span id="timeText">15s</span>
+    </div>
+
+    <div class="main">
+      <div class="label">¿Qué tipografía es?</div>
+      <div class="sample" id="sample">Tipografía</div>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <div id="endScreen" class="screen end">
+    <div class="label">Resultado final</div>
+    <h2 class="big-title">Tu resultado</h2>
+    <div class="end-score" id="finalScore">0 pts</div>
+
+    <p class="intro">
+      Dejá tu nombre para aparecer en el ranking de este navegador.
+    </p>
+
+    <div class="form">
+      <input id="nameInput" maxlength="20" placeholder="Tu nombre" autocomplete="off">
+      <button class="primary" id="saveBtn">Guardar resultado</button>
+    </div>
+
+    <div class="rank">
+      <h3>Ranking</h3>
+      <div id="ranking"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const FONT_BANK = [
+  {name:"Roboto", css:"Roboto", category:"sans"},
+  {name:"Montserrat", css:"Montserrat", category:"sans"},
+  {name:"Poppins", css:"Poppins", category:"sans"},
+  {name:"Inter", css:"Inter", category:"sans"},
+  {name:"Open Sans", css:"Open Sans", category:"sans"},
+  {name:"Lato", css:"Lato", category:"sans"},
+  {name:"Nunito", css:"Nunito", category:"sans"},
+  {name:"DM Sans", css:"DM Sans", category:"sans"},
+  {name:"Manrope", css:"Manrope", category:"sans"},
+  {name:"Work Sans", css:"Work Sans", category:"sans"},
+  {name:"Raleway", css:"Raleway", category:"sans"},
+  {name:"Rubik", css:"Rubik", category:"sans"},
+  {name:"Barlow", css:"Barlow", category:"sans"},
+  {name:"Archivo", css:"Archivo", category:"sans"},
+  {name:"Space Grotesk", css:"Space Grotesk", category:"sans"},
+  {name:"Source Sans 3", css:"Source Sans 3", category:"sans"},
+  {name:"Oswald", css:"Oswald", category:"display"},
+  {name:"Bebas Neue", css:"Bebas Neue", category:"display"},
+  {name:"Quicksand", css:"Quicksand", category:"sans"},
+  {name:"Playfair Display", css:"Playfair Display", category:"serif"},
+  {name:"Merriweather", css:"Merriweather", category:"serif"},
+  {name:"Libre Baskerville", css:"Libre Baskerville", category:"serif"},
+  {name:"Cormorant Garamond", css:"Cormorant Garamond", category:"serif"},
+  {name:"Lora", css:"Lora", category:"serif"},
+  {name:"Roboto Slab", css:"Roboto Slab", category:"serif"},
+  {name:"Source Serif 4", css:"Source Serif 4", category:"serif"},
+  {name:"Bitter", css:"Bitter", category:"serif"},
+  {name:"EB Garamond", css:"EB Garamond", category:"serif"},
+  {name:"Bodoni Moda", css:"Bodoni Moda", category:"serif"},
+  {name:"Abril Fatface", css:"Abril Fatface", category:"display"},
+  {name:"Anton", css:"Anton", category:"display"},
+  {name:"Lobster", css:"Lobster", category:"display"},
+  {name:"Pacifico", css:"Pacifico", category:"display"},
+  {name:"Permanent Marker", css:"Permanent Marker", category:"display"},
+  {name:"Roboto Mono", css:"Roboto Mono", category:"mono"},
+  {name:"Space Mono", css:"Space Mono", category:"mono"},
+  {name:"Inconsolata", css:"Inconsolata", category:"mono"},
+  {name:"IBM Plex Mono", css:"IBM Plex Mono", category:"mono"}
+];
+
+const TOTAL_ROUNDS = 15;
+const ROUND_TIME = 15;
+
+let rounds = [];
+let currentRound = 0;
+let score = 0;
+let timer = null;
+let startTime = 0;
+let answered = false;
+
+const startScreen = document.getElementById("startScreen");
+const gameScreen = document.getElementById("gameScreen");
+const endScreen = document.getElementById("endScreen");
+const startBtn = document.getElementById("startBtn");
+const saveBtn = document.getElementById("saveBtn");
+const nameInput = document.getElementById("nameInput");
+const sample = document.getElementById("sample");
+const answers = document.getElementById("answers");
+const feedback = document.getElementById("feedback");
+const timerFill = document.getElementById("timerFill");
+const timeText = document.getElementById("timeText");
+const scoreText = document.getElementById("scoreText");
+const roundText = document.getElementById("roundText");
+const finalScore = document.getElementById("finalScore");
+const ranking = document.getElementById("ranking");
+
+function shuffle(array){
+  return [...array].sort(() => Math.random() - 0.5);
+}
+
+function buildRounds(){
+  const selected = shuffle(FONT_BANK).slice(0, TOTAL_ROUNDS);
+  return selected.map(correct => {
+    const sameCategory = shuffle(
+      FONT_BANK.filter(f => f.name !== correct.name && f.category === correct.category)
+    );
+    const otherCategory = shuffle(
+      FONT_BANK.filter(f => f.name !== correct.name && f.category !== correct.category)
+    );
+
+    const distractors = [...sameCategory, ...otherCategory].slice(0,3);
+    return {correct, options:shuffle([correct, ...distractors])};
+  });
+}
+
+function showScreen(screen){
+  [startScreen, gameScreen, endScreen].forEach(s => s.classList.remove("active"));
+  screen.classList.add("active");
+}
+
+function startGame(){
+  rounds = buildRounds();
+  currentRound = 0;
+  score = 0;
+  scoreText.textContent = "Puntos: 0";
+  showScreen(gameScreen);
+  loadRound();
+}
+
+function loadRound(){
+  clearInterval(timer);
+  answered = false;
+
+  const round = rounds[currentRound];
+  roundText.textContent = `Ronda ${currentRound + 1} / ${TOTAL_ROUNDS}`;
+  sample.textContent = "AaBbCc";
+  sample.style.fontFamily = `"${round.correct.css}", sans-serif`;
+  sample.style.fontWeight = ["Bebas Neue","Anton","Lobster","Pacifico","Permanent Marker","Abril Fatface"].includes(round.correct.name) ? "400" : "600";
+
+  feedback.textContent = "";
+  feedback.className = "feedback";
+  answers.innerHTML = "";
+
+  round.options.forEach(font => {
+    const button = document.createElement("button");
+    button.className = "answer";
+    button.textContent = font.name;
+    button.addEventListener("click", () => chooseAnswer(font, button));
+    answers.appendChild(button);
+  });
+
+  startTimer();
+}
+
+function startTimer(){
+  const start = performance.now();
+  startTime = start;
+
+  timerFill.style.width = "100%";
+  timeText.textContent = `${ROUND_TIME}s`;
+
+  timer = setInterval(() => {
+    const elapsed = (performance.now() - start) / 1000;
+    const remaining = Math.max(0, ROUND_TIME - elapsed);
+    timerFill.style.width = `${(remaining / ROUND_TIME) * 100}%`;
+    timeText.textContent = `${Math.ceil(remaining)}s`;
+
+    if(remaining <= 0){
+      clearInterval(timer);
+      timeOut();
+    }
+  }, 50);
+}
+
+function chooseAnswer(font, button){
+  if(answered) return;
+  answered = true;
+  clearInterval(timer);
+
+  const elapsed = (performance.now() - startTime) / 1000;
+  const timeBonus = Math.max(0, Math.round((ROUND_TIME - elapsed) / ROUND_TIME * 50));
+
+  document.querySelectorAll(".answer").forEach(btn => btn.disabled = true);
+
+  if(font.name === rounds[currentRound].correct.name){
+    const points = 100 + timeBonus;
+    score += points;
+    scoreText.textContent = `Puntos: ${score}`;
+    button.classList.add("correct");
+    feedback.textContent = `Correcto. +${points} puntos`;
+    feedback.className = "feedback ok";
+  }else{
+    button.classList.add("wrong");
+    markCorrect();
+    feedback.textContent = `Era ${rounds[currentRound].correct.name}.`;
+    feedback.className = "feedback bad";
+  }
+
+  setTimeout(nextRound, 1000);
+}
+
+function markCorrect(){
+  document.querySelectorAll(".answer").forEach(btn => {
+    if(btn.textContent === rounds[currentRound].correct.name){
+      btn.classList.add("correct");
+    }
+  });
+}
+
+function timeOut(){
+  if(answered) return;
+  answered = true;
+
+  document.querySelectorAll(".answer").forEach(btn => btn.disabled = true);
+  markCorrect();
+
+  feedback.textContent = `Se acabó el tiempo. Era ${rounds[currentRound].correct.name}.`;
+  feedback.className = "feedback bad";
+
+  setTimeout(nextRound, 1100);
+}
+
+function nextRound(){
+  currentRound++;
+  if(currentRound >= TOTAL_ROUNDS){
+    finishGame();
+  }else{
+    loadRound();
+  }
+}
+
+function finishGame(){
+  clearInterval(timer);
+  finalScore.textContent = `${score} pts`;
+  showScreen(endScreen);
+  renderRanking();
+}
+
+function getRanking(){
+  try{
+    return JSON.parse(localStorage.getItem("qfaFontRanking") || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function saveResult(){
+  const name = nameInput.value.trim() || "Anónimo";
+  const rankingData = getRanking();
+
+  rankingData.push({
+    name:name.slice(0,20),
+    score:score,
+    date:Date.now()
+  });
+
+  rankingData.sort((a,b) => b.score - a.score);
+  localStorage.setItem("qfaFontRanking", JSON.stringify(rankingData.slice(0,10)));
+
+  nameInput.value = "";
+  renderRanking();
+}
+
+function renderRanking(){
+  const data = getRanking();
+
+  if(!data.length){
+    ranking.innerHTML = `<div class="muted">Todavía no hay resultados.</div>`;
+    return;
+  }
+
+  ranking.innerHTML = data.map((item,index) => `
+    <div class="rank-row">
+      <span>${index + 1}</span>
+      <strong>${escapeHtml(item.name)}</strong>
+      <strong>${item.score} pts</strong>
+    </div>
+  `).join("");
+}
+
+function escapeHtml(text){
+  return text.replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[char]));
+}
+
+startBtn.addEventListener("click", startGame);
+saveBtn.addEventListener("click", saveResult);
+nameInput.addEventListener("keydown", e => {
+  if(e.key === "Enter") saveResult();
+});
+</script>
+</body>
+</html>
