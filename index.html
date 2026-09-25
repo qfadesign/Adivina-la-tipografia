@@ -13,13 +13,13 @@
 
 <style>
 :root{
-  --blue:#4569e8;
-  --blue-dark:#3f62dc;
-  --black:#111827;
-  --muted:#718096;
-  --bg:#f6f7fb;
-  --white:#ffffff;
-  --line:#e1e5ee;
+  --blue:#0b75f4;
+  --blue-dark:#095fc7;
+  --black:#ffffff;
+  --muted:#b8c0cc;
+  --bg:#000000;
+  --white:#050505;
+  --line:#242424;
   --shadow:0 18px 45px rgba(36, 48, 80,.09);
 }
 
@@ -131,7 +131,7 @@ button{cursor:pointer}
   width:100%;
   height:8px;
   border:0;
-  background:#e8ebf3;
+  background:#242424;
   border-radius:99px;
   overflow:hidden;
 }
@@ -148,7 +148,7 @@ button{cursor:pointer}
   margin-top:15px;
   font-size:14px;
   font-weight:600;
-  color:#596579;
+  color:#c4cbd5;
 }
 
 .score strong{
@@ -159,7 +159,7 @@ button{cursor:pointer}
 .progress{
   margin-top:7px;
   font-size:12px;
-  color:#8a94a6;
+  color:#8f98a6;
   font-weight:500;
 }
 
@@ -205,7 +205,7 @@ button{cursor:pointer}
   min-height:56px;
   border:1px solid var(--line);
   border-radius:12px;
-  background:#fff;
+  background:#050505;
   color:var(--black);
   padding:15px 18px;
   text-align:center;
@@ -218,7 +218,7 @@ button{cursor:pointer}
 .answer:hover:not(:disabled){
   border-color:var(--blue);
   color:var(--blue);
-  background:#f8f9ff;
+  background:#0b75f4;
 }
 
 .answer.correct{
@@ -228,7 +228,7 @@ button{cursor:pointer}
 }
 
 .answer.wrong{
-  background:#eef1f7;
+  background:#151515;
   color:var(--black);
   border-color:#d9deea;
 }
@@ -243,7 +243,7 @@ button{cursor:pointer}
 }
 
 .feedback.ok{color:var(--blue)}
-.feedback.bad{color:#667085}
+.feedback.bad{color:#aeb6c2}
 
 .big-title{
   font-size:clamp(38px,7vw,58px);
@@ -275,7 +275,7 @@ button{cursor:pointer}
   padding:14px 22px;
   font-size:14px;
   font-weight:800;
-  box-shadow:0 7px 16px rgba(69,105,232,.20);
+  box-shadow:0 7px 16px rgba(11,117,244,.20);
   transition:.15s ease;
 }
 
@@ -307,13 +307,13 @@ button{cursor:pointer}
   border-radius:11px;
   padding:14px;
   outline:none;
-  background:#fff;
+  background:#050505;
   font-size:14px;
 }
 
 .form input:focus{
   border-color:var(--blue);
-  box-shadow:0 0 0 3px rgba(69,105,232,.10);
+  box-shadow:0 0 0 3px rgba(11,117,244,.10);
 }
 
 .rank{
@@ -337,7 +337,7 @@ button{cursor:pointer}
   border-top:1px solid var(--line);
   padding:11px 0;
   font-size:13px;
-  color:#5f6b7d;
+  color:#b7bec9;
 }
 
 .rank-row:last-child{
@@ -349,7 +349,7 @@ button{cursor:pointer}
 }
 
 .muted{
-  color:#8a94a6;
+  color:#8f98a6;
 }
 
 @media(max-width:600px){
